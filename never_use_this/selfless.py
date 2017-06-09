@@ -34,16 +34,16 @@ def add_self(function):
     index    = code.co_names.index('self')
     bytecode = []
     for op, arg in disassemble(function):
-        # increase argument of LOAD/STORE_FAST (because we're adding self to varnames).
+        # Increase argument of LOAD/STORE_FAST (because we're adding self to varnames).
         if op in (opcode.opmap['LOAD_FAST'], opcode.opmap['STORE_FAST']):
             arg += 1
-        # change LOAD_GLOBAL of self to LOAD_FAST.
+        # Change LOAD_GLOBAL of self to LOAD_FAST.
         elif op == opcode.opmap['LOAD_GLOBAL'] and arg == index:
             op, arg = opcode.opmap['LOAD_FAST'], 0
-        # change STORE_GLOBAL of self to STORE_FAST.
+        # Change STORE_GLOBAL of self to STORE_FAST.
         elif op == opcode.opmap['STORE_GLOBAL'] and arg == index:
             op, arg = opcode.opmap['STORE_FAST'], 0
-        # decrease argument of LOAD/STORE_GLOBAL/NAME/ATTR if it's after index (because we're removing self from names).
+        # Decrease argument of LOAD/STORE_GLOBAL/NAME/ATTR if it's after index (because we're removing self from names).
         elif op in (opcode.opmap['LOAD_NAME'], opcode.opmap['STORE_NAME'],
                     opcode.opmap['LOAD_ATTR'], opcode.opmap['STORE_ATTR'],
                     opcode.opmap['LOAD_GLOBAL'], opcode.opmap['STORE_GLOBAL']):
